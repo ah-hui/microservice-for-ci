@@ -1,0 +1,12 @@
+.idea
+/microservice-for-ci.iml
+target
+/consumeruser/consumer-user.iml
+/discoveryeureka/discovery-eureka.iml
+/provideruser/provider-user.iml
+/pojos/pojos.iml
+/common/common.iml
+/consumer-user/consumer-user.iml
+/discovery-eureka/discovery-eureka.iml
+/provider-user/provider-user.iml
+/gateway-zuul/gateway-zuul.iml

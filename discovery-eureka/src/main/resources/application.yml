@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: discovery-eureka
+  cloud:
+    inetutils:
+      preferred-networks:
+        - 10.0
+server:
+  port: 5008
+eureka:
+  instance:
+      hostname: discovery-eureka
+      instance-id: ${spring.application.name}:${server.port}
+  client:
+    register-with-eureka: false # 关闭高可用设置
+    fetch-registry: false # 关闭高可用设置
+    service-url:
+      defaultZone: http://10.0.0.126:${server.port}/eureka/
+  server:
+    enable-self-preservation: false # 关闭自我保护（自我保护就是不注销微服务）
+    eviction-interval-timer-in-ms: 60000 # 清理（无效节点）间隔 默认60*1000毫秒

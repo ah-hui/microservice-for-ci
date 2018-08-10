@@ -1,0 +1,38 @@
+# 表示该docker-compose.yml文件使用的是Version 2 file format
+version: '2'
+# Version 2 file format的固定写法，为project定义服务
+services:
+  # 指定服务名称
+  discovery-eureka:
+    # 指定服务所使用的镜像
+    image: ci/discovery-eureka:0.0.1-SNAPSHOT
+    container_name: discovery-eureka
+    # 暴露端口信息
+    ports:
+      - "5008:5008"
+    volumes:
+      - /root/test-ci/logs:/root/test-ci/logs
+  gateway-zuul:
+    # 指定服务所使用的镜像
+    image: ci/gateway-zuul:0.0.1-SNAPSHOT
+    container_name: gateway-zuul
+    # 暴露端口信息
+    ports:
+      - "5009:5009"
+    volumes:
+      - /root/test-ci/logs:/root/test-ci/logs
+  provider-user:
+    image: ci/provider-user:0.0.1-SNAPSHOT
+    container_name: provider-user
+    # 连接到discovery-eureka，使用的是SERVICE:ALIAS的形式
+    ports:
+      - "5006:5006"
+    volumes:
+      - /root/test-ci/logs:/root/test-ci/logs
+  consumer-user:
+    image: ci/consumer-user:0.0.1-SNAPSHOT
+    container_name: consumer-user
+    ports:
+      - "5007:5007"
+    volumes:
+      - /root/test-ci/logs:/root/test-ci/logs

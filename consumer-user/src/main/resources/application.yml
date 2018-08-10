@@ -1,0 +1,27 @@
+server:
+  port: 5007
+info:
+  app:
+    name: @project.artifactId@
+    encoding: @project.build.sourceEncoding@
+    java:
+      source: @java.version@
+      target: @java.version@
+spring:
+  application:
+    name: microservice-consumer-user # 指定注册到eureka server上的应用名称
+  cloud:
+    inetutils:
+      preferred-networks:
+        - 10.0
+eureka:
+  client:
+    service-url:
+      defaultZone: http://10.0.0.126:5008/eureka/
+    healthcheck:
+      enabled: true # 开启健康检查 - 需要spring-boot-starter-actuator依赖
+  instance:
+    prefer-ip-address: true # 将自己的IP注册到eureka server，如果为false（默认），则注册的是hostname
+    instance-id: ${spring.application.name}:${server.port}
+    lease-renewal-interval-in-seconds: 30 # 续约更新时间间隔（默认30秒）
+    lease-expiration-duration-in-seconds: 90 # 续约到期时间（默认90秒）

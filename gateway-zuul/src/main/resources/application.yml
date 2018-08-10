@@ -1,0 +1,41 @@
+server:
+  port: 5009
+spring:
+  application:
+    name: microservice-gateway-zuul # 指定注册到eureka server上的应用名称
+  cloud:
+    inetutils:
+      preferred-networks:
+        - 10.0
+eureka:
+  client:
+    service-url:
+      defaultZone: http://10.0.0.126:5008/eureka/
+    healthcheck:
+      enabled: true # 开启健康检查 - 需要spring-boot-starter-actuator依赖
+  instance:
+    prefer-ip-address: true # 将自己的IP注册到eureka server，如果为false（默认），则注册的是hostname
+    instance-id: ${spring.application.name}:${server.port}
+    lease-renewal-interval-in-seconds: 30 # 续约更新时间间隔（默认30秒）
+    lease-expiration-duration-in-seconds: 90 # 续约到期时间（默认90秒）
+management:
+  security:
+    enabled: false
+# Zuul默认代理所有注册到Eureka的微服务，以下配置可以让你自由控制/代理部分
+zuul:
+  ignored-services: '*' # 忽略全部，一般路径要自己指定，所以先忽略全部
+  routes:
+    microservice-provider-user: /user/** # 自定义微服务访问路径，格式：serviceId = 指定路径
+    microservice-file-upload: /file/**
+    consumer-route: # 跟上一个一样，只是分开写了，consumer-route只是路由名，可以任意起名
+      service-id: microservice-consumer-user
+      path: /movie/**
+  ignored-patterns: /**/admin/** # 忽略所有包含/admin/的路径（敏感路径）
+logging:
+  level:
+    com.netflix: DEBUG # 将com.netflix包的日志级别设为DEBUG，Zuul将会打印转发的具体细节，帮助学习理解
+# 禁用Zuul过滤器 - 以我自定义的过滤器为例
+#zuul:
+#  PreRequestLogFilter:
+#    pre:
+#      disable: true
